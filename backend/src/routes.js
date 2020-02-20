@@ -6,6 +6,7 @@ import multerConfig from './config/multer';
 // CONTROLLERS IMPORT
 import FileController from './app/controllers/FileController';
 import UserController from './app/controllers/UserController';
+import ProductController from './app/controllers/ProductController';
 
 const routes = new Router();
 const upload = multer(multerConfig);
@@ -21,6 +22,10 @@ routes.get('/', (req, res) => {
 routes.post('/users', UserController.store);
 
 // OPERATOR ROUTES
+
+// PRODUCT ROUTES
+routes.get('/products', ProductController.index);
+routes.post('/products', ProductController.store);
 
 // FILE ROUTE
 routes.post('/files', upload.single('file'), FileController.store);
