@@ -9,14 +9,14 @@ module.exports = {
       },
       img_id: {
         type: Sequelize.INTEGER,
-        references: { model: 'files', id: 'id' },
+        references: { model: 'files', key: 'id' },
         allowNull: true,
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
       },
       stock_id: {
         type: Sequelize.INTEGER,
-        references: { model: 'sales_stock', id: 'id' },
+        references: { model: 'sales_stock', key: 'id' },
         allowNull: false,
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',

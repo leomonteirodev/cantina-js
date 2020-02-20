@@ -9,13 +9,13 @@ module.exports = {
       },
       cashier_id: {
         type: Sequelize.INTEGER,
-        references: { model: 'cashiers', id: 'id' },
+        references: { model: 'cashiers', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
       },
       payment_id: {
         type: Sequelize.INTEGER,
-        references: { model: 'payment_methods', id: 'id' },
+        references: { model: 'payment_methods', key: 'id' },
         allowNull: false,
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
