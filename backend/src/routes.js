@@ -5,6 +5,7 @@ import multerConfig from './config/multer';
 
 // CONTROLLERS IMPORT
 import FileController from './app/controllers/FileController';
+import UserController from './app/controllers/UserController';
 
 const routes = new Router();
 const upload = multer(multerConfig);
@@ -17,6 +18,7 @@ routes.get('/', (req, res) => {
 // SESSION ROUTE
 
 // USER ROUTES
+routes.post('/users', UserController.store);
 
 // OPERATOR ROUTES
 
