@@ -31,11 +31,12 @@ routes.use(authMiddleware);
 routes.post('/cores', CoreController.store);
 
 // USER ROUTES
-routes.post('/users', UserController.store);
 routes.get('/users', UserController.index);
+routes.post('/users', UserController.store);
 
 // OPERATOR ROUTES
 routes.get('/operators', OperatorController.index);
+routes.post('/operators', OperatorController.store);
 
 // PRODUCT ROUTES
 routes.get('/products', ProductController.index);

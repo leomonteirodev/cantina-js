@@ -1,6 +1,10 @@
 import Core from '../models/Core';
 
 class CoreController {
+  async index(req, res) {
+    return res.json();
+  }
+
   async store(req, res) {
     /* const checkIsOperator = await User.findOne({
       where: { id: req.userId, operator: true },

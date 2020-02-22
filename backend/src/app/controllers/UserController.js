@@ -2,6 +2,22 @@ import User from '../models/User';
 import Core from '../models/Core';
 
 class UserController {
+  async index(req, res) {
+    const user = await User.findAll({
+      where: { operator: false },
+      attributes: ['id', 'name', 'email', 'balance'],
+      include: [
+        {
+          model: Core,
+          as: 'core',
+          attributes: ['id', 'name'],
+        },
+      ],
+    });
+
+    return res.json(user);
+  }
+
   async store(req, res) {
     const { email } = req.body;
 
@@ -23,22 +39,6 @@ class UserController {
         operator,
       },
     });
-  }
-
-  async index(req, res) {
-    const user = await User.findAll({
-      where: { operator: false },
-      attributes: ['id', 'name', 'email', 'balance'],
-      include: [
-        {
-          model: Core,
-          as: 'core',
-          attributes: ['id', 'name'],
-        },
-      ],
-    });
-
-    return res.json(user);
   }
 }
 

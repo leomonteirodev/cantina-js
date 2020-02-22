@@ -14,6 +14,12 @@ class SessionController {
       return res.status(401).json({ error: 'User not found' });
     }
 
+    if (user.operator === false) {
+      return res
+        .status(401)
+        .json({ error: 'Only operators can log into the system' });
+    }
+
     if (!(await user.checkPassword(password))) {
       return res.status(401).json({ error: 'Password does not match' });
     }
