@@ -1,33 +1,44 @@
 import User from '../models/User';
+import Core from '../models/Core';
 
 class UserController {
   async store(req, res) {
     const { email } = req.body;
 
-    const userExists = await User.findOne({ where: { email } });
+    const userExists = await User.findOne({
+      where: { email },
+    });
 
     if (userExists) {
       return res.status(400).json({ error: 'User already exists' });
     }
 
-    try {
-      const { id, name, balance, operator } = await User.create(req.body);
+    const { id, name, balance, operator } = await User.create(req.body);
 
-      return res.json({
-        user: {
-          id,
-          name,
-          balance,
-          operator,
-        },
-      });
-    } catch (err) {
-      return res.status(500).json({ error: 'Internal server error' });
-    }
+    return res.json({
+      user: {
+        id,
+        name,
+        balance,
+        operator,
+      },
+    });
   }
 
   async index(req, res) {
-    return res.json();
+    const user = await User.findAll({
+      where: { operator: false },
+      attributes: ['id', 'name', 'email', 'balance'],
+      include: [
+        {
+          model: Core,
+          as: 'core',
+          attributes: ['id', 'name'],
+        },
+      ],
+    });
+
+    return res.json(user);
   }
 }
 

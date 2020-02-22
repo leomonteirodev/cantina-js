@@ -7,12 +7,6 @@ module.exports = {
         primaryKey: true,
         allowNull: false,
       },
-      cashier_id: {
-        type: Sequelize.INTEGER,
-        references: { model: 'cashiers', key: 'id' },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',
-      },
       cnpj: {
         type: Sequelize.STRING,
         allowNull: false,

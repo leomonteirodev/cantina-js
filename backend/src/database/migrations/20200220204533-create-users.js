@@ -10,7 +10,6 @@ module.exports = {
       core_id: {
         type: Sequelize.INTEGER,
         references: { model: 'cores', key: 'id' },
-        allowNull: false,
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
       },
@@ -26,11 +25,12 @@ module.exports = {
       password_hash: {
         type: Sequelize.STRING,
         allowNull: true,
+        defaultValue: null,
       },
       balance: {
         type: Sequelize.FLOAT,
         allowNull: false,
-        defaultValue: 0.0,
+        defaultValue: 0,
       },
       operator: {
         type: Sequelize.BOOLEAN,

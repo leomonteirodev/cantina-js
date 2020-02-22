@@ -1,7 +1,5 @@
-import User from '../models/User';
-
 class OperatorController {
-  async store(req, res) {
+  async index(req, res) {
     return res.json({ ok: true });
   }
 }
