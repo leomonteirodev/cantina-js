@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import * as Yup from 'yup';
 
 import User from '../models/User';
 import Core from '../models/Core';
@@ -22,6 +23,22 @@ class OperatorController {
   }
 
   async store(req, res) {
+    const schema = Yup.object().shape({
+      name: Yup.string().required(),
+      email: Yup.string()
+        .email()
+        .required(),
+      balance: Yup.number(),
+      core_id: Yup.number().required(),
+      password: Yup.string()
+        .min(6)
+        .required(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(401).json({ error: 'Validation fails' });
+    }
+
     const { email, core_id } = req.body;
 
     const userExists = await User.findOne({
