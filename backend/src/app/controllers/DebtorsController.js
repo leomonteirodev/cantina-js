@@ -3,7 +3,8 @@ import { Op } from 'sequelize';
 import User from '../models/User';
 import Core from '../models/Core';
 
-import Mail from '../../lib/Mail';
+import Queue from '../../lib/Queue';
+import DebtReminderMail from '../jobs/DebtReminderMail';
 
 class DebtorsController {
   async index(req, res) {
@@ -18,19 +19,8 @@ class DebtorsController {
       ],
     });
 
-    debtors.map(async debtor => {
-      const { name, email, balance } = debtor;
-
-      await Mail.sendMail({
-        to: email,
-        subject: 'Lembrete - Saldo negativo',
-        template: 'debt-reminder',
-        context: {
-          name,
-          balance: -balance,
-          core: debtor.core.name,
-        },
-      });
+    await Queue.add(DebtReminderMail.key, {
+      debtors,
     });
 
     return res.json(debtors);
