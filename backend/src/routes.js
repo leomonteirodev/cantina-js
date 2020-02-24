@@ -10,6 +10,7 @@ import UserController from './app/controllers/UserController';
 import ProductController from './app/controllers/ProductController';
 import OperatorController from './app/controllers/OperatorController';
 import CoreController from './app/controllers/CoreController';
+import DebtorsController from './app/controllers/DebtorsController';
 
 import authMiddleware from './app/middlewares/auth';
 
@@ -41,6 +42,9 @@ routes.post('/operators', OperatorController.store);
 // PRODUCT ROUTES
 routes.get('/products', ProductController.index);
 routes.post('/products', ProductController.store);
+
+// DEBTORS CONTROLLERS
+routes.get('/debtors', DebtorsController.index);
 
 // FILE ROUTE
 routes.post('/files', upload.single('file'), FileController.store);
