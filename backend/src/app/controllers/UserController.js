@@ -1,5 +1,3 @@
-import * as Yup from 'yup';
-
 import User from '../models/User';
 import Core from '../models/Core';
 
@@ -21,19 +19,6 @@ class UserController {
   }
 
   async store(req, res) {
-    const schema = Yup.object().shape({
-      name: Yup.string().required(),
-      email: Yup.string()
-        .email()
-        .required(),
-      balance: Yup.number(),
-      core_id: Yup.number().required(),
-    });
-
-    if (!(await schema.isValid(req.body))) {
-      return res.status(400).json({ error: 'Validation fails' });
-    }
-
     const { email, core_id, password } = req.body;
 
     const userExists = await User.findOne({
@@ -75,10 +60,49 @@ class UserController {
   }
 
   async update(req, res) {
-    return res.json();
+    const { email } = req.body;
+
+    const user = await User.findOne({
+      where: {
+        id: req.params.id,
+        operator: false,
+      },
+    });
+
+    if (!user) {
+      return res.status(400).json({ error: 'User does not exists' });
+    }
+
+    const mailExists = await User.findOne({ where: { email } });
+
+    if (mailExists) {
+      return res.status(400).json({ error: 'Email already exists' });
+    }
+
+    const { id, name, balance } = await user.update(req.body);
+
+    return res.json({
+      id,
+      name,
+      email,
+      balance,
+    });
   }
 
   async destroy(req, res) {
+    const user = await User.findOne({
+      where: {
+        id: req.params.id,
+        operator: false,
+      },
+    });
+
+    if (!user) {
+      return res.status(400).json({ error: 'User does not exists' });
+    }
+
+    await user.destroy();
+
     return res.send();
   }
 }

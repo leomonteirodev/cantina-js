@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken';
-import * as Yup from 'yup';
 
 import User from '../models/User';
 import Core from '../models/Core';
@@ -23,22 +22,6 @@ class OperatorController {
   }
 
   async store(req, res) {
-    const schema = Yup.object().shape({
-      name: Yup.string().required(),
-      email: Yup.string()
-        .email()
-        .required(),
-      balance: Yup.number(),
-      core_id: Yup.number().required(),
-      password: Yup.string()
-        .min(6)
-        .required(),
-    });
-
-    if (!(await schema.isValid(req.body))) {
-      return res.status(401).json({ error: 'Validation fails' });
-    }
-
     const { email, core_id } = req.body;
 
     const userExists = await User.findOne({
@@ -61,7 +44,7 @@ class OperatorController {
 
     const { id, name, balance, operator } = await User.create(req.body);
 
-    return res.json({
+    return res.status(201).json({
       user: {
         id,
         name,
@@ -72,6 +55,63 @@ class OperatorController {
         expiresIn: authConfig.expiresIn,
       }),
     });
+  }
+
+  async update(req, res) {
+    const { email, oldPassword } = req.body;
+
+    const user = await User.findOne({
+      where: {
+        id: req.params.id,
+        operator: true,
+      },
+    });
+
+    if (!user) {
+      return res.status(400).json({ error: 'Operator does not exists' });
+    }
+
+    const operator = await User.findByPk(req.userId);
+
+    if (email && email !== operator.email) {
+      const emailExists = await User.findOne({
+        where: { email },
+      });
+
+      if (emailExists) {
+        return res.status(401).json({ error: 'User already exists' });
+      }
+    }
+
+    if (oldPassword && !(await user.checkPassword(oldPassword))) {
+      return res.status(401).json({ error: 'Password does not match' });
+    }
+
+    const { id, name, balance } = await user.update(req.body);
+
+    return res.json({
+      id,
+      name,
+      email,
+      balance,
+    });
+  }
+
+  async destroy(req, res) {
+    const user = await User.findOne({
+      where: {
+        id: req.params.id,
+        operator: true,
+      },
+    });
+
+    if (!user) {
+      return res.status(400).json({ error: 'Operator does not exists' });
+    }
+
+    await user.destroy();
+
+    return res.send();
   }
 }
 
