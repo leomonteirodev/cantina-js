@@ -1,6 +1,6 @@
-# Cantina Application
+# cantina-js
   
-  Migração do Sistema 'Cantina' para Web.
+  Aplicação para Cantinas Online
   
   Aplicação Web com API Rest em Node.js
     
