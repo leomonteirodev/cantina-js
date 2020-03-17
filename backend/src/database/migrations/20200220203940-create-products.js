@@ -14,13 +14,6 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
       },
-      sales_stock_id: {
-        type: Sequelize.INTEGER,
-        references: { model: 'sales_stock', key: 'id' },
-        allowNull: false,
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',
-      },
       name: {
         type: Sequelize.STRING,
         allowNull: false,

@@ -26,7 +26,6 @@ routes.get('/', (req, res) => {
 routes.post('/sessions', SessionController.store);
 
 // APPLYING MIDDLEWARE
-routes.use(authMiddleware);
 
 // CORE ROUTES
 routes.post('/cores', CoreController.store);
@@ -34,6 +33,8 @@ routes.post('/cores', CoreController.store);
 // USER ROUTES
 routes.get('/users', UserController.index);
 routes.post('/users', UserController.store);
+
+routes.use(authMiddleware);
 
 // OPERATOR ROUTES
 routes.get('/operators', OperatorController.index);

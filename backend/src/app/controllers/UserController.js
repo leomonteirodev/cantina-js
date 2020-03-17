@@ -4,7 +4,7 @@ import User from '../models/User';
 import Core from '../models/Core';
 
 class UserController {
-  async index(req, res) {
+  async index({ res }) {
     const user = await User.findAll({
       where: { operator: false },
       attributes: ['id', 'name', 'email', 'balance'],
@@ -72,6 +72,14 @@ class UserController {
         operator,
       },
     });
+  }
+
+  async update(req, res) {
+    return res.json();
+  }
+
+  async destroy(req, res) {
+    return res.send();
   }
 }
 

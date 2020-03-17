@@ -6,12 +6,13 @@ import File from '../app/models/File';
 import Product from '../app/models/Product';
 import Core from '../app/models/Core';
 import Cashier from '../app/models/Cashier';
+import SaleStock from '../app/models/SaleStock';
 
 // CONFIGS IMPORT
 import databaseConfig from '../config/database';
 
 // ALL MODELS
-const models = [Core, Cashier, User, Product, File];
+const models = [Core, Cashier, User, SaleStock, Product, File];
 
 class Database {
   constructor() {
