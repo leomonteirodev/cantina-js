@@ -1,36 +1,31 @@
-import * as Yup from 'yup';
-
 import Product from '../models/Product';
 import File from '../models/File';
 import SaleStock from '../models/SaleStock';
 
 class ProductController {
   async index({ res }) {
-    const products = await Product.findAll({
-      attributes: ['id', 'name', 'price'],
+    const stock = await SaleStock.findAll({
+      attributes: ['amount'],
       include: [
         {
-          model: File,
-          as: 'img',
-          attributes: ['name', 'path'],
+          model: Product,
+          as: 'product',
+          attributes: ['id', 'name', 'price'],
+          include: [
+            {
+              model: File,
+              as: 'img',
+              attributes: ['path', 'url'],
+            },
+          ],
         },
       ],
     });
-    return res.json(products);
+
+    return res.json(stock);
   }
 
   async store(req, res) {
-    const schema = Yup.object().shape({
-      price: Yup.number().required(),
-      img_id: Yup.number(),
-      name: Yup.string().required(),
-      amount: Yup.number().required(),
-    });
-
-    if (!(await schema.isValid(req.body))) {
-      return res.status(400).json({ error: 'Validation fails' });
-    }
-
     const { name, price, amount, img_id } = req.body;
 
     const product = await Product.create({
@@ -44,7 +39,33 @@ class ProductController {
       amount,
     });
 
+    return res.status(201).json(product);
+  }
+
+  async update(req, res) {
+    const { img_id, name, price, amount } = req.body;
+    const product = await Product.findByPk(req.params.id);
+
+    if (!product) {
+      return res.status(400).json({ error: 'Product does not exists' });
+    }
+
+    await product.update({
+      img_id,
+      name,
+      price,
+    });
+
+    const stock = await SaleStock.findOne({
+      where: { product_id: req.params.id },
+    });
+
+    await stock.update({ amount });
     return res.json(product);
+  }
+
+  async destroy(req, res) {
+    return res.json();
   }
 }
 

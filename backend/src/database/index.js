@@ -1,18 +1,34 @@
 import Sequelize from 'sequelize';
 
-// MODELS IMPORT
+// => Models
 import User from '../app/models/User';
 import File from '../app/models/File';
 import Product from '../app/models/Product';
 import Core from '../app/models/Core';
 import Cashier from '../app/models/Cashier';
+import Sale from '../app/models/Sale';
+import SaleItem from '../app/models/SaleItem';
 import SaleStock from '../app/models/SaleStock';
+import Input from '../app/models/Input';
+import InputStock from '../app/models/InputStock';
+import PaymentMethod from '../app/models/PaymentMethod';
 
-// CONFIGS IMPORT
 import databaseConfig from '../config/database';
 
-// ALL MODELS
-const models = [Core, Cashier, User, SaleStock, Product, File];
+// => Models to connect
+const models = [
+  Core,
+  Cashier,
+  User,
+  Sale,
+  SaleItem,
+  SaleStock,
+  Product,
+  File,
+  Input,
+  InputStock,
+  PaymentMethod,
+];
 
 class Database {
   constructor() {

@@ -19,6 +19,10 @@ import validateUserUpdate from './app/validations/UserUpdate';
 import validateOperatorStore from './app/validations/OperatorStore';
 import validateOperatorUpdate from './app/validations/OperatorUpdate';
 import validateSessionStore from './app/validations/SessionStore';
+import validateInputStore from './app/validations/InputStore';
+import validateInputUpdate from './app/validations/InputUpdate';
+import validateProductStore from './app/validations/ProductStore';
+import validateProductUpdate from './app/validations/ProductUpdate';
 
 // => Middlewares
 import authMiddleware from './app/middlewares/auth';
@@ -27,8 +31,8 @@ const routes = new Router();
 const upload = multer(multerConfig);
 
 // => Test route
-routes.get('/', (req, res) => {
-  return res.json({ message: 'CantinaApp Initialized' });
+routes.get('/', ({ res }) => {
+  return res.json({ message: 'Cantina Application Initialized' });
 });
 
 // => Authentication route
@@ -54,15 +58,17 @@ routes.delete('/operators', OperatorController.destroy);
 
 // => Product routes
 routes.get('/products', ProductController.index);
-routes.post('/products', ProductController.store);
+routes.post('/products', validateProductStore, ProductController.store);
+routes.put('/products/:id', validateProductUpdate, ProductController.update);
+routes.delete('/products/:id', ProductController.destroy);
 
 // => Input routes
 routes.get('/inputs', InputController.index);
-routes.post('/inputs', InputController.store);
-routes.put('/inputs/:id', InputController.update);
+routes.post('/inputs', validateInputStore, InputController.store);
+routes.put('/inputs/:id', validateInputUpdate, InputController.update);
 routes.delete('/inputs/:id', InputController.destroy);
 
-// => Input routes
+// => Debtor routes
 routes.get('/debtors', DebtorsController.index);
 
 // => Upload routes
