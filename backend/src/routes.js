@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import multer from 'multer';
+import Brute from 'express-brute';
+import BruteRedis from 'express-brute-redis';
 
 import multerConfig from './config/multer';
 
@@ -30,13 +32,25 @@ import authMiddleware from './app/middlewares/auth';
 const routes = new Router();
 const upload = multer(multerConfig);
 
+const BruteStore = new BruteRedis({
+  host: process.env.REDIS_HOST,
+  port: process.env.REDIS_PORT,
+});
+
+const BruteForce = new Brute(BruteStore);
+
 // => Test route
 routes.get('/', ({ res }) => {
   return res.json({ message: 'Cantina Application Initialized' });
 });
 
 // => Authentication route
-routes.post('/sessions', validateSessionStore, SessionController.store);
+routes.post(
+  '/sessions',
+  BruteForce.prevent,
+  validateSessionStore,
+  SessionController.store
+);
 
 // => Auth Middleware
 routes.use(authMiddleware);

@@ -6,7 +6,7 @@ import Core from '../models/Core';
 import authConfig from '../../config/auth';
 
 class OperatorController {
-  async index(req, res) {
+  async index({ res }) {
     const operators = await User.findAll({
       where: { operator: true },
       attributes: ['id', 'name', 'email', 'balance'],
